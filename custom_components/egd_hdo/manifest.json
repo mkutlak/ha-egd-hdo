@@ -1,6 +1,7 @@
 {
   "domain": "egd_hdo",
   "name": "EG.D HDO",
+  "categories": ["energy.energy_prices"],
   "codeowners": ["@mkutlak"],
   "config_flow": true,
   "documentation": "https://github.com/mkutlak/ha-egd-hdo",
