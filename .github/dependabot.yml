@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7 # let a hijacked release get noticed before it lands here
+    groups:
+      actions:
+        patterns: ["*"]

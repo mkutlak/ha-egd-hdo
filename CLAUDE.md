@@ -26,6 +26,16 @@ with `custom_components/egd_hdo` mounted.
 - Store schedule identity as region + tariff + `kodHdo_A`; other fields repeat across codes.
 - Translations: keep `translations/en.json` and `cs.json` key-identical; selector option keys are lowercase.
 
+## CI and supply chain
+
+- `.github/workflows/ci.yml` runs the tests, hassfest, HACS validation, zizmor (pedantic) and gitleaks.
+  Keep zizmor at zero findings: `docker run --rm -v "$PWD:/repo:ro" -w /repo <zizmor image from ci.yml> --offline --persona=pedantic .`
+- Pin each action to a full commit SHA with a `# vX.Y.Z` comment, and each tool image by digest with a tag comment.
+  The repo allows only GitHub-owned actions and requires SHA pins, so run other tools from their images.
+- Dependabot bumps the actions; image digests are bumped by hand (how: comment at the top of `ci.yml`).
+- Jobs get `permissions: contents: read` and checkout with `persist-credentials: false`.
+- Users' HDO codes, postal codes and addresses stay out of the repo: issues, fixtures and commits included.
+
 ## Release
 
 1. Bump `version` in `custom_components/egd_hdo/manifest.json`.
