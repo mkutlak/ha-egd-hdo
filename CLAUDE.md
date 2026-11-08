@@ -31,7 +31,8 @@ with `custom_components/egd_hdo` mounted.
 - `.github/workflows/ci.yml` runs the tests, hassfest, HACS validation, zizmor (pedantic) and gitleaks.
   Keep zizmor at zero findings: `docker run --rm -v "$PWD:/repo:ro" -w /repo <zizmor image from ci.yml> --offline --persona=pedantic .`
 - Pin each action to a full commit SHA with a `# vX.Y.Z` comment, and each tool image by digest with a tag comment.
-  The repo allows only GitHub-owned actions and requires SHA pins, so run other tools from their images.
+  The repo allows only GitHub-owned actions and requires SHA pins, so run other tools as `docker run` steps
+  (`uses: docker://` is blocked too).
 - Dependabot bumps the actions; image digests are bumped by hand (how: comment at the top of `ci.yml`).
 - Jobs get `permissions: contents: read` and checkout with `persist-credentials: false`.
 - Users' HDO codes, postal codes and addresses stay out of the repo: issues, fixtures and commits included.
