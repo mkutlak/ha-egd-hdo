@@ -1,0 +1,12 @@
+{
+  "domain": "egd_hdo",
+  "name": "EG.D HDO",
+  "codeowners": ["@mkutlak"],
+  "config_flow": true,
+  "documentation": "https://github.com/mkutlak/ha-egd-hdo",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/mkutlak/ha-egd-hdo/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

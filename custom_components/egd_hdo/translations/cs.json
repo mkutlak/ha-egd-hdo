@@ -1,0 +1,73 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Nízký tarif EG.D (HDO)",
+        "description": "Časy se načítají z veřejného API EG.D. Účet není potřeba.",
+        "data": {
+          "device": "Co spíná nízký tarif",
+          "psc": "PSČ"
+        },
+        "data_description": {
+          "psc": "Jen pro přijímač HDO. Použije se jednou k určení regionu a neukládá se."
+        }
+      },
+      "region": {
+        "title": "Region",
+        "description": "Vaše PSČ patří do více regionů EG.D. Pokud si nejste jistí, zkuste jeden a porovnejte kódy HDO se štítkem přijímače.",
+        "data": {
+          "region": "Region"
+        }
+      },
+      "tariff": {
+        "title": "Sazba",
+        "description": "Distribuční sazbu najdete na faktuře za elektřinu, např. D25d. TAR je hlavní tarifní relé, TUV spíná ohřev vody (bojler).",
+        "data": {
+          "tariff": "Sazba a relé"
+        }
+      },
+      "code": {
+        "title": "Kód HDO",
+        "description": "Kód je na štítku přijímače HDO v elektroměrovém rozvaděči, na displeji chytrého elektroměru nebo v aplikaci Distribuce24. U každé volby jsou dnešní časy nízkého tarifu.",
+        "data": {
+          "code": "Kód HDO"
+        }
+      }
+    },
+    "error": {
+      "invalid_psc": "Zadejte PSČ s 5 číslicemi.",
+      "unknown_psc": "Pro toto PSČ nemá EG.D region HDO.",
+      "cannot_connect": "API EG.D není dostupné. Zkuste to později.",
+      "bad_data": "API EG.D poslalo data, kterým integrace nerozumí."
+    },
+    "abort": {
+      "already_configured": "Tento rozvrh HDO už je nastavený.",
+      "bad_data": "API EG.D poslalo data, kterým integrace nerozumí."
+    }
+  },
+  "selector": {
+    "device": {
+      "options": {
+        "receiver": "Přijímač HDO v rozvaděči",
+        "smart_meter": "Chytrý elektroměr",
+        "time_switch": "Spínací hodiny (kód začíná PH)",
+        "tou_meter": "Elektroměr TOU"
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "low_tariff": {
+        "name": "Nízký tarif"
+      }
+    },
+    "sensor": {
+      "window_start": {
+        "name": "Začátek nízkého tarifu"
+      },
+      "window_end": {
+        "name": "Konec nízkého tarifu"
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "EG.D low tariff (HDO)",
+        "description": "Times come from the public EG.D API. No account is needed.",
+        "data": {
+          "device": "What switches your low tariff",
+          "psc": "Postal code (PSČ)"
+        },
+        "data_description": {
+          "psc": "Only for an HDO receiver. Used once to find your region and not stored."
+        }
+      },
+      "region": {
+        "title": "Region",
+        "description": "Your postal code belongs to more than one EG.D region. If you are not sure, try one and compare the HDO codes with the label on your receiver.",
+        "data": {
+          "region": "Region"
+        }
+      },
+      "tariff": {
+        "title": "Tariff",
+        "description": "The distribution tariff is on your electricity bill, e.g. D25d. TAR is the main tariff relay, TUV switches water heating.",
+        "data": {
+          "tariff": "Tariff and relay"
+        }
+      },
+      "code": {
+        "title": "HDO code",
+        "description": "The code is on the label of the HDO receiver in the meter box, on the smart meter display, or in the Distribuce24 app. Each option shows today's low-tariff times.",
+        "data": {
+          "code": "HDO code"
+        }
+      }
+    },
+    "error": {
+      "invalid_psc": "Enter a postal code with 5 digits.",
+      "unknown_psc": "EG.D has no HDO region for this postal code.",
+      "cannot_connect": "Cannot reach the EG.D API. Try again later.",
+      "bad_data": "The EG.D API sent data this integration cannot read."
+    },
+    "abort": {
+      "already_configured": "This HDO schedule is already set up.",
+      "bad_data": "The EG.D API sent data this integration cannot read."
+    }
+  },
+  "selector": {
+    "device": {
+      "options": {
+        "receiver": "HDO receiver in the meter box",
+        "smart_meter": "Smart meter",
+        "time_switch": "Time switch (code starts with PH)",
+        "tou_meter": "TOU meter"
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "low_tariff": {
+        "name": "Low tariff"
+      }
+    },
+    "sensor": {
+      "window_start": {
+        "name": "Low tariff start"
+      },
+      "window_end": {
+        "name": "Low tariff end"
+      }
+    }
+  }
+}
