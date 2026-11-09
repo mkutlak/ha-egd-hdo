@@ -55,6 +55,27 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(hdo.split_tariffs("C45d,C46d,D45d"), ["C45d", "C46d", "D45d"])
         self.assertEqual(hdo.split_tariffs("D25d-relé1-TAR"), [D25])
 
+    def test_every_segment_is_a_list(self) -> None:
+        # Verbatim /casy strings: one relay with several uses, and a list of relays.
+        self.assertEqual(
+            hdo.split_tariffs("C35d,D35d-relé1-TUV,PV,AKU"),
+            [
+                "C35d-relé1-TUV", "C35d-relé1-PV", "C35d-relé1-AKU",
+                "D35d-relé1-TUV", "D35d-relé1-PV", "D35d-relé1-AKU",
+            ],
+        )
+        self.assertEqual(hdo.split_tariffs("A2T-relé1,2"), ["A2T-relé1", "A2T-relé2"])
+        self.assertEqual(hdo.split_tariffs(""), [])
+
+    def test_shared_relay_is_offered_for_each_use(self) -> None:
+        found = hdo.tariffs(CASY, "VERSACOM")  # from "D25d-relé1-TAR,TUV"
+        self.assertIn("D25d-relé1-TUV", found)
+        self.assertNotIn("TUV", found)
+        self.assertEqual(
+            [o.code for o in hdo.codes(CASY, "VERSACOM", "D25d-relé1-TUV", date(2026, 11, 9))],
+            [o.code for o in hdo.codes(CASY, "VERSACOM", D25, date(2026, 11, 9))],
+        )
+
     def test_tariffs_in_region(self) -> None:
         self.assertIn(D25, hdo.tariffs(CASY, "VERSACOM"))
         self.assertIn("D45d-relé2-TUV", hdo.tariffs(CASY, "SM"))

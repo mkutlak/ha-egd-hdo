@@ -7,7 +7,9 @@ which makes this module the trust boundary: it validates every field it uses.
 Data quirks (see tests/fixtures for real samples):
 - A schedule is identified by region + tariff + ``kodHdo_A``. ``skupinaPovelu``
   and the A/B/DP triple are not unique.
-- ``"C45d,D45d-relé1-PV"`` means the relay suffix applies to both tariffs.
+- ``sazba`` is ``tariffs[-relays][-uses]`` and each part is a comma list:
+  ``"C45d,D45d-relé1-PV"`` is two tariffs on one relay, ``"D25d-relé1-TAR,TUV"``
+  one relay with two uses, ``"A2T-relé1,2"`` relays 1 and 2.
 - A period starting in year 9999 repeats every year and may wrap New Year;
   an end in year 9999 means "no end".
 - ``23:59`` is the end of the day. A weekday missing from ``dny`` has no NT.
@@ -18,6 +20,7 @@ from __future__ import annotations
 from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, timedelta
+from itertools import product
 import re
 from typing import Any
 from zoneinfo import ZoneInfo
@@ -119,12 +122,12 @@ def regions_for_psc(rows: Any, psc: str) -> list[str]:
 
 
 def split_tariffs(sazba: str) -> list[str]:
-    """Split a ``sazba`` field; a relay suffix on the last item applies to all."""
-    parts = [part.strip() for part in sazba.split(",") if part.strip()]
-    if not parts:
-        return []
-    _, sep, suffix = parts[-1].partition("-")
-    return [part if "-" in part or not sep else f"{part}-{suffix}" for part in parts]
+    """One option per tariff, relay and use: ``"C45d,D45d-relé1-TAR,TUV"`` gives four."""
+    lists = [
+        [f"relé{p}" if p.isdigit() else p for p in (p.strip() for p in seg.split(",")) if p]
+        for seg in sazba.split("-")
+    ]
+    return ["-".join(combo) for combo in product(*lists)]
 
 
 def tariffs(entries: Any, region: str) -> list[str]:
