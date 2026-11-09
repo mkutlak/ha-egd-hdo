@@ -15,6 +15,7 @@ from homeassistant.helpers.selector import (
     SelectSelectorConfig,
     SelectSelectorMode,
     TextSelector,
+    TextSelectorConfig,
 )
 from homeassistant.util import dt as dt_util
 
@@ -87,7 +88,9 @@ class HdoConfigFlow(ConfigFlow, domain=DOMAIN):
                 probatio.Required(CONF_DEVICE, default=DEVICE_RECEIVER): _select(
                     list(DEVICE_REGIONS), SelectSelectorMode.LIST, CONF_DEVICE
                 ),
-                probatio.Optional(CONF_PSC): TextSelector(),
+                probatio.Optional(CONF_PSC): TextSelector(
+                    TextSelectorConfig(autocomplete="postal-code")
+                ),
             }
         )
         return self.async_show_form(

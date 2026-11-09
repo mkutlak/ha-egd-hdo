@@ -21,7 +21,7 @@
       },
       "tariff": {
         "title": "Tariff",
-        "description": "The distribution tariff is on your electricity bill, e.g. D25d. TAR is the main tariff relay, TUV switches water heating.",
+        "description": "The distribution tariff is on your electricity bill, e.g. D25d. The end of each option says what the relay switches: TAR the meter's low tariff, TUV water heating, AKU storage heating, EMO EV charging. One relay can switch several, so two options may have the same times.",
         "data": {
           "tariff": "Tariff and relay"
         }

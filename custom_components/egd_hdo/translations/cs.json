@@ -21,7 +21,7 @@
       },
       "tariff": {
         "title": "Sazba",
-        "description": "Distribuční sazbu najdete na faktuře za elektřinu, např. D25d. TAR je hlavní tarifní relé, TUV spíná ohřev vody (bojler).",
+        "description": "Distribuční sazbu najdete na faktuře za elektřinu, např. D25d. Konec volby říká, co relé spíná: TAR nízký tarif elektroměru, TUV ohřev vody (bojler), AKU akumulační vytápění, EMO nabíjení elektromobilu. Jedno relé může spínat víc věcí, takže dvě volby mohou mít stejné časy.",
         "data": {
           "tariff": "Sazba a relé"
         }
