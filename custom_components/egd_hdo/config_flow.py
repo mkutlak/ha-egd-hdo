@@ -102,10 +102,10 @@ class HdoConfigFlow(ConfigFlow, domain=DOMAIN):
             if psc is None:
                 regions = [DEVICE_REGIONS[device]]
             else:
-                rows = await async_fetch_json(self.hass, REGION_URL)
+                rows, _ = await async_fetch_json(self.hass, REGION_URL)
                 if not (regions := hdo.regions_for_psc(rows, psc)):
                     return {CONF_PSC: "unknown_psc"}
-            self._entries = await async_fetch_json(self.hass, HDO_URL)
+            self._entries, _ = await async_fetch_json(self.hass, HDO_URL)
             self._regions = [r for r in regions if hdo.tariffs(self._entries, r)]
         except (aiohttp.ClientError, TimeoutError) as err:
             _LOGGER.debug("Cannot reach EG.D: %s", err)

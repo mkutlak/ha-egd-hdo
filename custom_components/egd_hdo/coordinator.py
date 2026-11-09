@@ -25,16 +25,27 @@ _TIMEOUT = aiohttp.ClientTimeout(total=60)
 type HdoConfigEntry = ConfigEntry[HdoCoordinator]
 
 
-async def async_fetch_json(hass: HomeAssistant, url: str) -> Any:
-    """GET a public EG.D endpoint and decode JSON, with a size cap."""
+async def async_fetch_json(
+    hass: HomeAssistant, url: str, etag: str | None = None
+) -> tuple[Any, str | None]:
+    """GET a public EG.D endpoint and decode JSON, with a size cap.
+
+    Returns the data and its ETag; the data is None when it still matches ``etag``.
+    """
     session = async_get_clientsession(hass)
+    headers = {"If-None-Match": etag} if etag else None
     body = bytearray()
-    async with session.get(url, timeout=_TIMEOUT, raise_for_status=True) as resp:
+    async with session.get(
+        url, headers=headers, timeout=_TIMEOUT, raise_for_status=True
+    ) as resp:
+        if resp.status == 304:
+            return None, etag
         async for chunk in resp.content.iter_chunked(64 * 1024):
             body += chunk
             if len(body) > MAX_BYTES:
                 raise hdo.HdoDataError(f"{url} sent more than {MAX_BYTES} bytes")
-    return json.loads(body)
+        new_etag = resp.headers.get("ETag")
+    return json.loads(body), new_etag
 
 
 class HdoCoordinator(DataUpdateCoordinator[hdo.Schedule]):
@@ -51,14 +62,19 @@ class HdoCoordinator(DataUpdateCoordinator[hdo.Schedule]):
             update_interval=timedelta(hours=12),
             always_update=False,
         )
+        self._etag: str | None = None  # ETag of the body that self.data came from
 
     async def _async_update_data(self) -> hdo.Schedule:
         data = self.config_entry.data
         try:
-            entries = await async_fetch_json(self.hass, HDO_URL)
-            return hdo.select_schedule(
+            entries, etag = await async_fetch_json(self.hass, HDO_URL, self._etag)
+            if entries is None:  # 304: EG.D data unchanged
+                return self.data
+            schedule = hdo.select_schedule(
                 entries, data[CONF_REGION], data[CONF_TARIFF], data[CONF_CODE]
             )
+            self._etag = etag
+            return schedule
         except (aiohttp.ClientError, TimeoutError, ValueError) as err:
             # ValueError covers bad JSON and HdoDataError.
             if self.data is not None:
