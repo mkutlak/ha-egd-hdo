@@ -39,13 +39,27 @@ Bez HACS: zkopírujte složku `custom_components/egd_hdo` do `config/custom_comp
 1. **Co spíná nízký tarif**: přijímač HDO v rozvaděči, chytrý elektroměr, spínací hodiny (kód `PH…`) nebo elektroměr TOU.
    U přijímače zadejte i **PSČ**; podle něj se určí region.
 2. **Sazba a relé**, např. `D25d-relé1-TAR`. Sazbu najdete na faktuře.
-   `TAR` je hlavní tarifní relé, `TUV` spíná ohřev vody.
-3. **Kód HDO**. Je na štítku přijímače HDO v elektroměrovém rozvaděči
-   (u regionů Východ a Versacom ve tvaru A/B/DP, např. `A1 B5 DP4`),
-   na displeji chytrého elektroměru nebo v aplikaci Distribuce24.
+   Konec říká, co relé spíná: `TAR` nízký tarif elektroměru, `TUV` ohřev vody,
+   `AKU` akumulační vytápění, `EMO` nabíjení elektromobilu. Jedno relé může spínat víc věcí,
+   pak mají volby (např. `D25d-relé1-TAR` a `D25d-relé1-TUV`) stejné časy.
+3. **Kód HDO**, viz [Kde najdu kód HDO](#kde-najdu-kód-hdo).
    U každé volby jsou vidět dnešní časy NT, takže je můžete porovnat se skutečností.
 
 Chcete-li sledovat víc relé (např. TAR i TUV), přidejte integraci vícekrát.
+
+### Kde najdu kód HDO
+
+- **Přijímač HDO**: otevřete elektroměrový rozvaděč. Vedle elektroměru je přijímač HDO
+  (např. Siemens 7RR701 nebo 7RR703, FMX 100, 300, 511, 519 nebo 529, RC2301).
+  Na jeho štítku je buď **kód HDO** (jen číslice), nebo **povel HDO** (písmena a číslice,
+  u regionů Východ a Versacom ve tvaru A/B/DP, např. `A1 B5 DP4`).
+  Fotky štítků jednotlivých přijímačů ukazuje návod EG.D
+  [Jak vyhledat kód HDO](https://www.egd.cz/jak-vyhledat-kod-hdo).
+  V seznamu kódů je u povelu A/B/DP v závorce i číselný kód, takže najdete obojí.
+- **Chytrý elektroměr**: kód je na displeji elektroměru nebo v aplikaci Distribuce24.
+- **Spínací hodiny**: kód začíná na `PH`.
+- **Kód nenajdete?** Porovnejte dnešní časy u jednotlivých voleb s tím, kdy se vám nízký tarif
+  opravdu přepíná, nebo s časy z [vyhledávání časů HDO](https://www.egd.cz/vyhledat-casy-hdo-pro-vasi-lokalitu) na webu EG.D.
 
 ## Příklad: nabíjení baterie v nízkém tarifu
 
@@ -101,6 +115,12 @@ States switch exactly at the boundaries; the schedule is downloaded twice a day.
 install **EG.D HDO** and restart. Then add the integration and pick the device type
 (plus your postal code for an HDO receiver), the tariff and relay, and the HDO code
 from your receiver label, smart meter display or the Distribuce24 app.
+
+**Finding the HDO code**: the HDO receiver sits next to the electricity meter in the meter box.
+Its label shows either a numeric *kód HDO* or a *povel HDO* such as `A1 B5 DP4`; the code list
+shows both. EG.D's guide [Jak vyhledat kód HDO](https://www.egd.cz/jak-vyhledat-kod-hdo)
+has photos of each receiver model. Time-switch codes start with `PH`. If you cannot find the code,
+compare today's times shown next to each option with when your low tariff really switches.
 
 **Privacy**: only the region, tariff and code are stored. The postal code is used once and never stored.
 
